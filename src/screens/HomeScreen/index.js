@@ -6,9 +6,12 @@ import Search from "../../assets/Icons/SearchIcon.svg";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from "../../components/Item"
+import CartModal from "../../components/Cart";
 const HomeScreen=()=>{
     const [product,setProduct]=useState([]);
-    const [search, setSearch] = useState("");
+    const [search, setSearch]=useState("");
+    const [cartmodal,setCartModal]=useState(false);
+    const [selectedCategory, setSelectedCategory]=useState("");
     useEffect(()=>{
         const fetchData=async()=>{
             try{
@@ -21,8 +24,10 @@ const HomeScreen=()=>{
         }
         fetchData();
     },[]);
-     const filteredProducts = product.filter((item) =>
-            item.title.toLowerCase().includes(search.toLowerCase())
+    const filteredProducts=product.filter((item) =>{const matchSearch =item.title.toLowerCase().includes(search.toLowerCase());
+        const match=selectedCategory===""|| item.category === selectedCategory;
+        return matchSearch && match;
+     }
     );
     const addtocart=async(prod)=>{
         try{
@@ -55,9 +60,9 @@ const HomeScreen=()=>{
 
                 <Text style={{fontSize:20,fontWeight:"bold"}}>PRODUCTS</Text>
 
-                <View>
+                <TouchableOpacity onPress={()=>setCartModal(true)}>
                     <Cart width={35} height={35}/>
-                </View>
+                </TouchableOpacity>
             </View>
 
             <View style={style.searchbar}>
@@ -76,9 +81,16 @@ const HomeScreen=()=>{
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     >
+                    <TouchableOpacity style={[style.filtertab,selectedCategory === "" && { backgroundColor: "black" }]}onPress={() => setSelectedCategory("")}>
+                        <Text style={{color:COLORS.White}}>
+                            All
+                        </Text>
+                    </TouchableOpacity>
                     {categories.map((item, index) => (
-                        <TouchableOpacity key={index} style={style.filtertab}>
-                            <Text style={{color:COLORS.White}}>{item}</Text>
+                        <TouchableOpacity key={index} style={[style.filtertab,selectedCategory === item && { backgroundColor: "black" }]}onPress={() => setSelectedCategory(item)}>
+                            <Text style={{color:COLORS.White}}>
+                                {item}
+                            </Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -89,6 +101,8 @@ const HomeScreen=()=>{
           <Item key={index} prod={item} addtocart={addtocart}/>
         ))}
             </View>
+            
+        <CartModal open={cartmodal} close={()=>setCartModal(false)}/>
         </ScrollView>
     )
 }
