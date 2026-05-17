@@ -1,6 +1,6 @@
 import {View,Text,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import COLORS from '../../constants/COLORS';
-const ItemBox=({prod})=>{
+const ItemBox=({prod,addtocart})=>{
     const formatdes=(text)=>{
         if(text.length>80){
             return(text.substring(0,80)+"..");
@@ -19,7 +19,7 @@ const ItemBox=({prod})=>{
                     <Text style={{fontSize:16,fontWeight:"bold",marginBottom:5}}>{prod.title}</Text>
                     <Text style={{marginBottom:5}}>{des}</Text>
                     <Text style={{marginBottom:5,color:COLORS.Orange,fontWeight:"bold"}}>${prod.price}</Text>
-                    <TouchableOpacity style={style.btn} onPress={(event)=>event.stopPropagation()}>
+                    <TouchableOpacity style={style.btn} onPress={(event)=>{event.stopPropagation(),addtocart(prod)}}>
                         <Text style={{color:COLORS.White}}>Add to Cart</Text>
                     </TouchableOpacity>
                 </View>

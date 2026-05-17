@@ -1,9 +1,10 @@
+import React from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View, Text } from 'react-native';
 import {
   SafeAreaProvider,SafeAreaView,
-  useSafeAreaInsets,
+  useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import HomeScreen from "../Ecommerce/src/screens/HomeScreen"
+import HomeScreen from "./src/screens/HomeScreen";
 
 function App() {
 
